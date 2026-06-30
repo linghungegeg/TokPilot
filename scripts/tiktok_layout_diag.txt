@@ -1,0 +1,35 @@
+URL=https://www.tiktok.com/login/phone-or-email/email
+innerW=1384 innerH=835
+
+--- BODY ---
+body w=1384 h=835 maxW=none
+
+--- ALL TOP-LEVEL DIVS (body children) ---
+[0] DIV#app class=""
+    w=1384 maxW=none display=block
+[1] DIV class=""
+    w=1384 maxW=none display=block
+[2] DIV class=""
+    w=0 maxW=none display=none
+[3] SCRIPT#__LOADABLE_REQUIRED_CHUNKS__ class=""
+    w=0 maxW=none display=none
+[4] SCRIPT#__LOADABLE_REQUIRED_CHUNKS___ext class=""
+    w=0 maxW=none display=none
+[5] SCRIPT class=""
+    w=0 maxW=none display=none
+[6] SCRIPT class=""
+    w=0 maxW=none display=none
+[7] SCRIPT class=""
+    w=0 maxW=none display=none
+[8] SCRIPT class=""
+    w=0 maxW=none display=none
+[9] SCRIPT class=""
+    w=0 maxW=none display=none
+
+--- #app / #root ---
+app w=1384 maxW=none display=block
+  child[0] DIV class="tiktok-3nh3z2-DivContainer e307n590"
+    w=1384 maxW=none display=flex
+
+--- ELEMENTS WITH max-width < 600px (first 20) ---
+tag=DIV class="tux-dialog__content-container radius-containerslevel2-small" maxW=360px offsetW=280

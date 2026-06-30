@@ -1,0 +1,41 @@
+URL=https://www.tiktok.com/login/phone-or-email/email
+
+--- DIALOG/MODAL ELEMENTS ---
+count=8
+[0] tag=DIV class="tiktok-q0pf73-DivModalContainer e1gjoq3k0"
+    w=0 h=0 maxW=none display=none position=fixed
+    child[0] DIV class="tiktok-1o4zb36-DivModalMask e1gjoq3k2" w=0 maxW=none
+[1] tag=DIV class="tiktok-1o4zb36-DivModalMask e1gjoq3k2"
+    w=0 h=0 maxW=none display=block position=fixed
+[2] tag=DIV class="tux-base-dialog tux-base-dialog--close"
+    w=1384 h=835 maxW=none display=flex position=fixed
+    child[0] DIV class="tux-base-dialog__container" w=280 maxW=none
+[3] tag=DIV class="tux-base-dialog__container"
+    w=280 h=44 maxW=none display=block position=relative
+    child[0] DIV class="tux-dialog__content-container radius-containerslevel2-small" w=280 maxW=360px
+[4] tag=DIV class="tux-dialog__content-container radius-containerslevel2-small"
+    w=280 h=44 maxW=360px display=flex position=static
+    child[0] DIV class="tux-dialog__content-title-container tux-dialog__content-pt-24" w=280 maxW=none
+    child[1] DIV class="tux-dialog__content-action-container tux-dialog__content-action-container--vertical" w=280 maxW=none
+
+--- ELEMENTS WITH max-width < 1000px (up to 30) ---
+tag=DIV class="tux-dialog__content-container radius-containerslevel2-small" maxW=360px offsetW=280 offsetH=44
+
+--- ALL FORMS and INPUT containers ---
+form count=1
+form[0] w=375 maxW=none
+
+--- DIVs with tiktok- class ---
+count=24
+[0] "tiktok-3nh3z2-DivContainer e307n590" w=1384 maxW=none display=flex
+[1] "tiktok-103wteu-DivHeaderContainer-StyledHeaderContainer ejj8kjg1" w=1384 maxW=none display=flex
+[2] "tiktok-qz3hn2-DivBodyContainer e307n591" w=1384 maxW=none display=block
+[3] "tiktok-5dti0e-DivLoginContainer exd0a431" w=363 maxW=none display=block
+[4] "tiktok-a6tysm-DivAnimationWrapper e4tqhm26" w=363 maxW=none display=block
+[5] "tiktok-t9ciu8-DivLoginContainer e4tqhm20" w=375 maxW=none display=block
+[6] "tiktok-1q5vajd-DivDescription e4tqhm22" w=375 maxW=none display=flex
+[7] "tiktok-5icxcj-StyledDivInputContainer e4tqhm23" w=375 maxW=none display=block
+[8] "tiktok-q83gm2-DivInputContainer etcs7ny0" w=375 maxW=none display=block
+[9] "tiktok-txpjn9-DivIconContainer etcs7ny2" w=44 maxW=none display=flex
+[10] "tiktok-a3oc12-StyledDivPasswordInputContainer e4tqhm24" w=375 maxW=none display=block
+[11] "tiktok-15iauzg-DivContainer e1bi0g3c0" w=375 maxW=none display=block

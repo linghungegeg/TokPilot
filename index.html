@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok 全自动加好友</title>
+  <link rel="stylesheet" href="./src/renderer/styles.css">
+</head>
+<body data-active-view="dm">
+  <div id="app-root" class="app-shell">
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  左侧边栏                                -->
+    <!-- ═══════════════════════════════════════ -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>TikTok<span>全自动</span></h1>
+      </div>
+
+      <!-- 账号筛选 -->
+      <div class="filter-tabs">
+        <button class="filter-tab is-active" data-filter="all">全部 <small id="filter-count-all">0</small></button>
+        <button class="filter-tab" data-filter="online">在线 <small id="filter-count-online">0</small></button>
+        <button class="filter-tab" data-filter="offline">离线 <small id="filter-count-offline">0</small></button>
+      </div>
+
+      <!-- 账号列表 -->
+      <div id="accounts-list" class="account-list">
+        <div class="empty-hint">暂无账号</div>
+      </div>
+
+      <!-- 快捷操作 -->
+      <div class="sidebar-actions">
+        <button id="account-import-btn" class="btn btn-secondary btn-xs">导入</button>
+        <button id="account-login-all-btn" class="btn btn-primary btn-xs">全部登录</button>
+        <button id="account-restore-all-btn" class="btn btn-secondary btn-xs">恢复会话</button>
+        <button id="account-dedup-btn" class="btn btn-secondary btn-xs">去重</button>
+      </div>
+
+      <!-- 功能导航 -->
+      <div class="sidebar-nav">
+        <span class="nav-label">功能</span>
+        <button class="nav-btn" data-nav="accounts">账号管理</button>
+        <button class="nav-btn is-active" data-nav="dm">引流私信</button>
+        <button class="nav-btn" data-nav="task">任务控制</button>
+        <button class="nav-btn" data-nav="settings">设置</button>
+      </div>
+
+      <div class="sidebar-footer">
+        <span class="clock" id="beijing-clock">--:--:--</span>
+        <span id="app-version">v1.0.0</span>
+      </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  右侧主内容                              -->
+    <!-- ═══════════════════════════════════════ -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h2 id="topbar-title">引流私信</h2>
+          <p id="topbar-subtitle">搜索 TikTok 用户并自动发送私信</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="task-pause-btn" class="btn btn-secondary" style="display:none">暂停</button>
+          <button id="task-stop-btn" class="btn btn-danger" style="display:none">停止</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!--  账号管理面板                    -->
+      <!-- ═══════════════════════════════ -->
+      <div class="app-view" data-view="accounts">
+
+        <!-- 账号健康 -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>账号健康</h3>
+            <span id="healthScore" class="health-badge health-loading">--</span>
+          </div>
+          <div style="padding:14px 18px">
+            <div class="health-slot-row">
+              <div class="form-group" style="flex:1">
+                <label style="font-size:12px">槽位范围（如 1-5, 7, 10-12）</label>
+                <input type="text" id="health-slot-input" placeholder="1-5, 7, 10-12" style="width:100%" />
+              </div>
+              <button id="checkHealthBtn" class="btn btn-health btn-sm">检测健康</button>
+              <button id="checkHealthAllBtn" class="btn btn-secondary btn-sm" title="检测所有在线账号">全部在线</button>
+            </div>
+            <div class="health-bar-wrapper">
+              <div id="healthBar" class="health-bar" style="width: 0%"></div>
+            </div>
+            <div id="healthStatus" class="health-status">输入槽位范围后点击检测（支持 1-5, 7, 10-12 格式）</div>
+            <div id="healthDetail" class="health-detail"></div>
+            <div id="healthSummary" class="health-summary"></div>
+            <div id="healthWarnings" class="health-warnings"></div>
+            <div id="healthTips" class="health-tips"></div>
+            <div id="healthSignals" class="health-signals"></div>
+          </div>
+        </div>
+
+        <!-- 账号导入导出 -->
+        <div class="panel">
+          <div class="panel-header"><h3>账号管理</h3></div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>导入账号（每行一个，格式：账号----密码----邮箱----邮箱密码----2FA）</label>
+              <textarea id="account-import-ta" placeholder="tiktok_user----password----user@outlook.com----mailpass----2FASECRET"></textarea>
+              <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                <button id="account-import-btn2" class="btn btn-primary btn-sm">批量导入</button>
+                <span id="account-import-status" class="status-msg" style="display:none"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>导出账号</label>
+              <textarea id="export-accounts-output" readonly placeholder="点击导出按钮获取账号数据"></textarea>
+              <button id="export-accounts-btn" class="btn btn-secondary btn-sm btn-block" style="margin-top:6px">导出所有账号</button>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:12px">
+            <div class="form-group">
+              <label>每小时最大发送 (每槽)</label>
+              <input type="number" id="settings-maxperhour-input" value="10" min="1" max="100" />
+            </div>
+            <div class="form-group">
+              <label>批量登录并发数</label>
+              <input type="number" id="settings-batch-size" value="3" min="1" max="10" />
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>账号预热时长 (分钟)</label>
+              <input type="number" id="settings-warmup-minutes" value="10" min="0" max="120" />
+            </div>
+            <div class="form-group" style="justify-content:flex-end">
+              <button id="settings-save-btn" class="btn btn-primary" style="align-self:flex-end">保存设置</button>
+            </div>
+          </div>
+          <div id="settings-status" class="status-msg" style="margin-top:8px;display:none"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!--  引流私信面板                    -->
+      <!-- ═══════════════════════════════ -->
+      <div class="app-view is-active" data-view="dm">
+
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-label">在线账号</div><div class="stat-value" id="dm-stat-online">0</div></div>
+          <div class="stat-box accent"><div class="stat-label">已发送</div><div class="stat-value" id="dm-stat-sent">0</div></div>
+          <div class="stat-box success"><div class="stat-label">成功</div><div class="stat-value" id="dm-stat-success">0</div></div>
+          <div class="stat-box danger"><div class="stat-label">失败</div><div class="stat-value" id="dm-stat-failed">0</div></div>
+          <div class="stat-box"><div class="stat-label">跳过</div><div class="stat-value" id="dm-stat-skipped">0</div></div>
+          <div class="stat-box accent"><div class="stat-label">进度</div><div class="stat-value" id="dm-stat-progress">0/0</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>私信任务</h3>
+            <button id="dm-start-btn" class="btn btn-primary" style="min-width:100px">开始发送</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>搜索关键词（每行一个，或用逗号分隔）</label>
+              <input type="text" id="dm-keyword-input" placeholder="dance, music, funny" />
+            </div>
+            <div class="form-group">
+              <label>每关键词最多发送人数</label>
+              <input type="number" id="dm-maxresults-input" value="20" min="1" max="100" />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:10px">
+            <label>私信模板（支持 {username} 变量）</label>
+            <input type="text" id="dm-template-input" placeholder="Hi {username}! 来看看我的主页吧~" />
+          </div>
+
+          <div class="progress-wrap" style="margin-top:14px">
+            <div class="progress"><div id="dm-progress-bar" class="progress-bar" style="width:0%"></div></div>
+            <span class="progress-text" id="dm-progress-text">0 / 0</span>
+          </div>
+        </div>
+
+        <!-- 问候管理 -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>问候管理</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="greeting-status" style="font-size:12px;color:var(--muted)">待启动</span>
+              <button id="greeting-start-btn" class="btn btn-primary btn-sm">启动</button>
+              <button id="greeting-stop-btn" class="btn btn-danger btn-sm" style="display:none">停止</button>
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin:0">新好友自动打招呼，支持待发队列重试和手动补发。</p>
+        </div>
+
+        <!-- 聊天面板 -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>聊天记录</h3>
+            <div style="display:flex;gap:8px">
+              <button id="chat-records-refresh-btn" class="btn btn-secondary btn-sm">刷新</button>
+              <button id="chat-records-export-btn" class="btn btn-secondary btn-sm">导出</button>
+              <span style="font-size:11px;color:var(--muted);margin-left:auto" id="chat-records-stats">总计: 0 | 成功: 0 | 失败: 0</span>
+            </div>
+          </div>
+          <div id="chat-records-list" style="max-height:400px;overflow-y:auto">
+            <div class="empty-hint">点击刷新加载聊天记录</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px">
+            <button id="chat-records-prev-btn" class="btn btn-secondary btn-sm" disabled>上一页</button>
+            <span id="chat-records-page" style="font-size:12px;color:var(--muted)">第 1 页</span>
+            <button id="chat-records-next-btn" class="btn btn-secondary btn-sm" disabled>下一页</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!--  任务控制面板                    -->
+      <!-- ═══════════════════════════════ -->
+      <div class="app-view" data-view="task">
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-label">任务状态</div><div class="stat-value" id="task-stat-status">待机中</div></div>
+          <div class="stat-box"><div class="stat-label">任务模式</div><div class="stat-value" id="task-stat-mode">-</div></div>
+          <div class="stat-box success"><div class="stat-label">成功</div><div class="stat-value" id="task-stat-success">0</div></div>
+          <div class="stat-box danger"><div class="stat-label">失败</div><div class="stat-value" id="task-stat-failed">0</div></div>
+          <div class="stat-box"><div class="stat-label">跳过</div><div class="stat-value" id="task-stat-skipped">0</div></div>
+          <div class="stat-box accent"><div class="stat-label">进度</div><div class="stat-value" id="task-stat-progress">0/0</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>任务详情</h3>
+            <div style="display:flex;gap:8px">
+              <button id="task-resume-btn" class="btn btn-primary btn-sm" style="display:none">继续</button>
+              <button id="task-stop-btn2" class="btn btn-danger btn-sm" style="display:none">停止</button>
+            </div>
+          </div>
+          <div class="info-list">
+            <div class="info-item"><strong>状态</strong><span id="task-detail-status">待机中</span></div>
+            <div class="info-item"><strong>运行ID</strong><span id="task-detail-runid">-</span></div>
+            <div class="info-item"><strong>最后错误</strong><span id="task-detail-error">-</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!--  设置面板                        -->
+      <!-- ═══════════════════════════════ -->
+      <div class="app-view" data-view="settings">
+
+        <!-- ═══════════════════════════════════ -->
+        <!--  AI 自动回复（置顶）               -->
+        <!-- ═══════════════════════════════════ -->
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>AI 自动回复</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="auto-reply-status" style="font-size:12px;color:var(--muted)">已停止</span>
+              <button id="auto-reply-start-btn" class="btn btn-primary btn-sm">启动</button>
+              <button id="auto-reply-stop-btn" class="btn btn-danger btn-sm" style="display:none">停止</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:8px">
+            <label>
+              <input type="checkbox" id="auto-reply-enabled" style="width:auto;margin-right:6px" />
+              启用自动回复
+            </label>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>AI 接口 Base URL</label>
+              <input type="text" id="auto-reply-baseurl" placeholder="https://api.openai.com" />
+            </div>
+            <div class="form-group">
+              <label>API Key</label>
+              <input type="password" id="auto-reply-apikey" placeholder="sk-..." />
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>模型</label>
+              <input type="text" id="auto-reply-model" placeholder="gpt-4o-mini" />
+            </div>
+            <div class="form-group" style="justify-content:flex-end">
+              <button id="auto-reply-save-btn" class="btn btn-primary btn-sm" style="align-self:flex-end">保存 AI 设置</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:10px">
+            <label>系统提示词（为空则使用内置默认）</label>
+            <textarea id="auto-reply-prompt" rows="4" placeholder="自定义系统提示词..."></textarea>
+          </div>
+
+          <!-- ═══ AI 接口池（卡片式） ═══ -->
+          <div class="provider-pool-section" style="margin-top:10px">
+            <div class="provider-pool-header">
+              <h4 style="font-size:13px;font-weight:700;margin:0">AI 接口池</h4>
+              <button id="auto-reply-add-provider-btn" class="btn btn-secondary btn-sm" type="button">+ 添加接口</button>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin:4px 0 8px 0">配置后优先使用接口池；为空时走上方单接口配置。</p>
+            <div id="auto-reply-providers-list" class="providers-list"></div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>回复速率 (每小时)</label>
+              <input type="number" id="auto-reply-maxhourly" value="20" min="1" max="500" />
+            </div>
+            <div class="form-group">
+              <label>上下文消息数</label>
+              <input type="number" id="auto-reply-context-msgs" value="15" min="1" max="20" />
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>账号间隔最小 (毫秒)</label>
+              <input type="number" id="auto-reply-account-delay-min" value="5000" min="1000" max="3600000" step="1000" />
+            </div>
+            <div class="form-group">
+              <label>账号间隔最大 (毫秒)</label>
+              <input type="number" id="auto-reply-account-delay-max" value="5000" min="1000" max="3600000" step="1000" />
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>好友间隔最小 (毫秒)</label>
+              <input type="number" id="auto-reply-friend-delay-min" value="10000" min="1000" max="86400000" step="1000" />
+            </div>
+            <div class="form-group">
+              <label>好友间隔最大 (毫秒)</label>
+              <input type="number" id="auto-reply-friend-delay-max" value="10000" min="1000" max="86400000" step="1000" />
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>AI 超时 (毫秒)</label>
+              <input type="number" id="auto-reply-timeout" value="30000" min="5000" max="120000" step="1000" />
+            </div>
+            <div class="form-group">
+              <label>重试次数</label>
+              <input type="number" id="auto-reply-retry" value="3" min="0" max="10" />
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px">
+            <div class="form-group">
+              <label>AI Temperature</label>
+              <input type="number" id="auto-reply-temperature" value="0.7" min="0" max="2" step="0.1" />
+            </div>
+            <div class="form-group">
+              <label>AI Max Tokens</label>
+              <input type="number" id="auto-reply-max-tokens" value="500" min="50" max="4096" step="50" />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:10px">
+            <label>测试对话</label>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="auto-reply-test-input" placeholder="输入测试消息..." style="flex:1" />
+              <button id="auto-reply-test-btn" class="btn btn-secondary btn-sm">测试</button>
+            </div>
+            <div id="auto-reply-test-result" class="status-msg" style="margin-top:6px;display:none"></div>
+          </div>
+        </div>
+
+        <!-- 飞书机器人 -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>飞书远程控制</h3>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span id="larkbot-status" style="font-size:12px;color:var(--muted)">待启动</span>
+              <button id="larkbot-start-btn" class="btn btn-primary btn-sm">启动</button>
+              <button id="larkbot-stop-btn" class="btn btn-danger btn-sm" style="display:none">停止</button>
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin:0">通过飞书机器人远程查看状态、暂停/恢复槽位。</p>
+          <div class="form-row" style="margin-top:8px">
+            <div class="form-group">
+              <label>App ID</label>
+              <input type="text" id="larkbot-appid" placeholder="cli_..." />
+            </div>
+            <div class="form-group">
+              <label>App Secret</label>
+              <input type="password" id="larkbot-secret" placeholder="..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- 网络代理 -->
+        <div class="panel">
+          <div class="panel-header"><h3>网络代理</h3></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>HTTP 代理地址</label>
+              <div style="display:flex;gap:6px">
+                <input type="text" id="settings-http-proxy" placeholder="http://127.0.0.1:7890" style="flex:1" />
+                <button id="proxy-detect-btn" class="btn btn-secondary btn-sm">检测</button>
+              </div>
+              <span id="settings-proxy-status" class="status-msg" style="display:none"></span>
+            </div>
+            <div class="form-group">
+              <label>操作间隔 (ms)</label>
+              <input type="number" id="settings-delay-input" value="20000" min="1000" step="500" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Per-slot 代理（高级） -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Per-slot 代理 <span style="font-size:11px;color:var(--warning);font-weight:normal;margin-left:6px">高级</span></h3>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin:0 0 10px 0">为每个槽位绑定独立代理，未绑定槽位走全局代理兜底。槽位绑定示例：<code>1-20, 35, 40-50</code></p>
+
+          <label class="toggle-row" style="margin-bottom:10px;display:flex;align-items:center;gap:10px">
+            <input type="checkbox" id="proxy-pool-enabled-toggle" />
+            <span>
+              <strong>启用高级代理模式</strong>
+              <small style="display:block;font-size:11px;color:var(--muted)">启用后按槽位绑定分配代理，不影响全局代理逻辑。</small>
+            </span>
+          </label>
+
+          <div id="proxy-pool-entries-list" class="proxy-pool-entries">
+            <div class="muted" style="font-size:12px;padding:6px 0">尚未添加代理条目，请点击"+ 添加代理"。</div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button id="proxy-pool-add-entry-btn" class="btn btn-secondary btn-sm">+ 添加代理</button>
+            <button id="proxy-pool-save-btn" class="btn btn-primary btn-sm">保存代理设置</button>
+          </div>
+        </div>
+
+        <!-- 存储信息 -->
+        <div class="panel">
+          <div class="panel-header"><h3>存储信息</h3></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>配置目录</label>
+              <div style="display:flex;gap:6px">
+                <input type="text" id="storage-config-path" readonly style="flex:1" />
+                <button id="storage-open-btn" class="btn btn-secondary btn-sm">打开</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>用户数据目录</label>
+              <div style="display:flex;gap:6px">
+                <input type="text" id="storage-userdata-path" readonly style="flex:1" />
+                <button id="storage-userdata-open-btn" class="btn btn-secondary btn-sm">打开</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 日志文件 -->
+        <div class="panel">
+          <div class="panel-header"><h3>日志文件</h3></div>
+          <div id="log-files-list" class="log-files-list">
+            <div class="muted" style="font-size:12px;padding:6px 0">加载中...</div>
+          </div>
+          <div style="margin-top:10px">
+            <button id="log-dir-open-btn" class="btn btn-secondary btn-sm">打开日志目录</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+  <script type="module" src="./src/renderer/renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "name": "tiktok-account-manager",
+  "version": "1.0.0",
+  "description": "TikTok全自动加好友",
+  "author": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "concurrently -k -n VITE,ELECTRON -c cyan,green \"vite\" \"wait-on tcp:5173 && cross-env NODE_ENV=development node scripts/run-electron.js .\"",
+    "start": "node scripts/run-electron.js .",
+    "build": "node scripts/build-fresh.js --self",
+    "build:self": "node scripts/build-fresh.js --self",
+    "check:syntax": "node scripts/check-syntax.js",
+    "check": "npm run check:syntax",
+    "test": "npm run check",
+    "lint": "npm run check:syntax",
+    "typecheck": "npm run check:syntax"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8",
+    "vite": "^5.4.0",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "electron-store": "^8.0.1",
+    "imapflow": "^1.4.0",
+    "sql.js": "^1.14.1",
+    "ws": "^8.21.0"
+  },
+  "build": {
+    "appId": "com.tiktok.accountmanager",
+    "productName": "TikTok 全自动加好友",
+    "artifactName": "${productName} ${version}.${ext}",
+    "icon": "build/icon.png",
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "knowledge.json",
+      "package.json",
+      "src/**/*",
+      "build/**/*",
+      "images/**/*"
+    ],
+    "win": {
+      "target": [
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "icon": "build/icon-app.ico",
+      "asar": true,
+      "compression": "maximum"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

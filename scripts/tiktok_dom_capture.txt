@@ -1,0 +1,38 @@
+=== URL: https://www.tiktok.com/login/phone-or-email/email ===
+=== TITLE ===
+登录 | TikTok
+
+=== LOGIN FORM ELEMENTS ===
+--- Inputs (2) ---
+  [0] type=text name=username placeholder=电子邮件或用户名 autocomplete=webauthn class=tiktok-1iztziv-InputContainer etcs7ny1 id= aria-label= data-e2e= parent=DIV visible=true
+    parent-snippet: FORM.
+  [1] type=password name= placeholder=密码 autocomplete=new-password class=tiktok-1iztziv-InputContainer etcs7ny1 id= aria-label= data-e2e= parent=DIV visible=true
+    parent-snippet: FORM.
+
+--- Buttons ---
+  [0] text= type=button class=tiktok-v960db-ButtonPasskey e13mgq8k0 data-e2e= aria-label= disabled=false visible=true
+  [1] text=登录 type=submit class=e1w6iovg1 tiktok-1hcmd14-Button-StyledButton ehk74z00 data-e2e=login-button aria-label= disabled=true visible=true
+
+--- Links ---
+  [2] text=使用手机登录 href=/login/phone-or-email/phone
+  [3] text=忘记密码？ href=/login/email/forget-password
+  [4] text=注册 href=/signup
+
+=== ALL DATA-E2E ELEMENTS ===
+  tag=A data-e2e=tiktok-logo text=TikTok visible=true
+  tag=A data-e2e=feedback-entrance text=意见反馈与帮助 visible=true
+  tag=svg data-e2e= text= visible=false
+  tag=BUTTON data-e2e=login-button text=登录 visible=true
+  tag=DIV data-e2e=back-btn text=返回 visible=true
+  tag=svg data-e2e= text= visible=false
+  tag=DIV data-e2e=bottom-text text=还没有账号？ visible=true
+  tag=SPAN data-e2e=bottom-sign-up text=注册 visible=true
+
+=== COOKIES ===
+tiktok_webapp_theme_source=auto; tiktok_webapp_theme=dark
+
+=== BODY CLASSES ===
+(none)
+
+=== #app / #root STRUCTURE (first 3 levels) ===
+<script id="tiktok-environment-webapp">

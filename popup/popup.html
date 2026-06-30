@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok自动化助手</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <!-- 插件头部 -->
+    <div class="header">
+        <div class="logo">
+            <span class="logo-icon">🤖</span>
+            <h1 class="title">TikTok智能助手</h1>
+        </div>
+        <div class="version">v1.3.3</div>
+    </div>
+
+    <!-- 主要功能区域 -->
+    <div class="main-content">
+        <!-- 自动回复设置区域 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">💬</span>
+                <h2 class="section-title">智能自动回复</h2>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="autoReplyToggle" class="toggle-input">
+                    <label for="autoReplyToggle" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="section-content">
+                <div class="status-indicator" id="autoReplyStatus">
+                    <span class="status-dot inactive"></span>
+                    <span class="status-text">功能已关闭</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="replyMessage" class="input-label">回复话术设置：</label>
+                    <textarea 
+                        id="replyMessage" 
+                        class="message-input"
+                        placeholder="请输入自动回复的消息内容，支持多行文本..."
+                        rows="3">你好！感谢你的消息，我会尽快回复你的~</textarea>
+                    <div class="input-helper">💡 支持换行，建议设置1-3句友好回复</div>
+                </div>
+
+                <div class="settings-row">
+                    <label class="setting-label">
+                        <span>打字速度：</span>
+                        <select id="typingSpeed" class="select-input">
+                            <option value="fast">较快 (50-80ms/字)</option>
+                            <option value="normal" selected>正常 (80-120ms/字)</option>
+                            <option value="slow">较慢 (120-200ms/字)</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自动关注设置区域 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">❤️</span>
+                <h2 class="section-title">智能自动关注</h2>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="autoFollowToggle" class="toggle-input">
+                    <label for="autoFollowToggle" class="toggle-label">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="section-content">
+                <div class="status-indicator" id="autoFollowStatus">
+                    <span class="status-dot inactive"></span>
+                    <span class="status-text">功能已关闭</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="welcomeMessage" class="input-label">关注后欢迎消息：</label>
+                    <textarea 
+                        id="welcomeMessage" 
+                        class="message-input"
+                        placeholder="请输入关注后自动发送的欢迎消息..."
+                        rows="3">感谢关注！✨ 欢迎来到我的TikTok，希望我的内容能带给你快乐~</textarea>
+                    <div class="input-helper">💡 设置温暖友好的欢迎词，增加粉丝互动</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 私信获客助手 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">🔎</span>
+                <h2 class="section-title">私信获客助手</h2>
+            </div>
+            
+            <div class="section-content">
+                <div class="input-group">
+                    <label for="searchKeyword" class="input-label">搜索关键词：</label>
+                    <input 
+                        id="searchKeyword" 
+                        class="text-input"
+                        type="text"
+                        placeholder="例如：fitness coach">
+                </div>
+
+                <div class="input-group">
+                    <label for="profileMessage" class="input-label">私信草稿：</label>
+                    <textarea 
+                        id="profileMessage" 
+                        class="message-input"
+                        placeholder="请输入打开用户主页后要填入的私信内容..."
+                        rows="3">你好！刚刚关注了你，很高兴认识你 😊</textarea>
+                    <div class="input-helper">💡 手动发送后点“已发送，下一位”，或按 Alt+N 继续</div>
+                </div>
+
+                <div class="queue-summary">
+                    <span>队列：</span>
+                    <strong id="queueCount">0</strong>
+                    <span>个待处理</span>
+                </div>
+
+                <div class="assistant-actions">
+                    <button id="searchCollectBtn" class="btn btn-primary">
+                        <span class="btn-icon">🔎</span>
+                        搜索并抓取
+                    </button>
+                    
+                    <button id="openNextPrepareBtn" class="btn btn-secondary">
+                        <span class="btn-icon">⚡</span>
+                        准备下一位
+                    </button>
+
+                    <button id="sentNextPrepareBtn" class="btn btn-primary">
+                        <span class="btn-icon">✅</span>
+                        已发送，下一位
+                    </button>
+
+                    <button id="clearQueueBtn" class="btn btn-outline">
+                        <span class="btn-icon">🧹</span>
+                        清空队列
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统设置区域 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">⚙️</span>
+                <h2 class="section-title">系统设置</h2>
+            </div>
+
+            <div class="section-content">
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <span>检测间隔：</span>
+                            <select id="checkInterval" class="select-input">
+                                <option value="2000">2秒</option>
+                                <option value="3000" selected>3秒</option>
+                                <option value="5000">5秒</option>
+                                <option value="10000">10秒</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <label class="setting-label">
+                            <span>操作延时：</span>
+                            <select id="actionDelay" class="select-input">
+                                <option value="1000">1-2秒</option>
+                                <option value="2000" selected>2-3秒</option>
+                                <option value="3000">3-5秒</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="debugMode" class="checkbox-input">
+                        <span class="checkbox-custom"></span>
+                        <span>开启调试模式（控制台显示详细日志）</span>
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="safeMode" class="checkbox-input" checked>
+                        <span class="checkbox-custom"></span>
+                        <span>安全模式（增加随机延时避免检测）</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 账号健康状态 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">🩺</span>
+                <h2 class="section-title">账号健康</h2>
+                <span id="healthScore" class="health-badge health-loading">--</span>
+            </div>
+            <div class="section-content">
+                <div class="health-bar-wrapper">
+                    <div id="healthBar" class="health-bar" style="width: 0%"></div>
+                </div>
+                <div id="healthStatus" class="health-status">点击下方按钮检测</div>
+                <div id="healthWarnings" class="health-warnings"></div>
+                <div id="healthTips" class="health-tips"></div>
+                <div id="healthSignals" class="health-signals"></div>
+                <button id="checkHealthBtn" class="btn btn-health" style="width: 100%; margin-top: 8px;">
+                    <span class="btn-icon">🩺</span>
+                    检测账号健康
+                </button>
+            </div>
+        </div>
+
+        <!-- 统计信息区域 -->
+        <div class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">📊</span>
+                <h2 class="section-title">今日统计</h2>
+            </div>
+            
+            <div class="section-content">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="todayReplies">0</div>
+                        <div class="stat-label">自动回复</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="todayFollows">0</div>
+                        <div class="stat-label">自动关注</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalProcessed">0</div>
+                        <div class="stat-label">处理消息</div>
+                    </div>
+                </div>
+                
+                <div class="last-active">
+                    <span>最后活动：</span>
+                    <span id="lastActiveTime">未活动</span>
+                </div>
+                
+                <button id="resetStatsBtn" class="btn btn-outline">
+                    <span class="btn-icon">🔄</span>
+                    重置今日统计
+                </button>
+            </div>
+        </div>
+
+        <!-- 操作按钮区域 -->
+        <div class="action-buttons">
+            <button id="saveBtn" class="btn btn-primary">
+                <span class="btn-icon">💾</span>
+                保存设置
+            </button>
+            
+            <button id="testBtn" class="btn btn-secondary">
+                <span class="btn-icon">🧪</span>
+                测试插件功能
+            </button>
+
+            <button id="debugFollowBtn" class="btn btn-debug">
+                <span class="btn-icon">🔧</span>
+                调试回关流程
+            </button>
+            
+            <button id="resetStatsBtn" class="btn btn-outline">
+                <span class="btn-icon">🔄</span>
+                重置统计
+            </button>
+            
+            <button id="advancedBtn" class="btn btn-outline">
+                <span class="btn-icon">⚙️</span>
+                高级设置
+            </button>
+        </div>
+    </div>
+
+    <!-- 底部信息 -->
+    <div class="footer">
+        <div class="warning-text">
+            ⚠️ 请遵守TikTok社区规范，合理使用自动化功能
+        </div>
+        <div class="help-links">
+            <a href="#" id="helpLink">使用教程</a>
+            <span class="separator">|</span>
+            <a href="#" id="feedbackLink">问题反馈</a>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="popup.js"></script>
+</body>
+</html> 
