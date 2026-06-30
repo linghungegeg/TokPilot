@@ -26,15 +26,20 @@ It brings account import, login, user search, message sending, AI replies, proxy
 
 ## Screenshots
 
-![Settings and proxy](images/10a9aba3a04fb190fd2dd1e47658810b.png)
-
-![AI auto-reply settings](images/37a3b8ead913b9b38125a4ead40f8792.png)
-
-![Screenshot 3](images/94691706b92d40ecc4ee096a5c3d2c6a.png)
-
-![Screenshot 4](images/d00ba2eb659372b6fdbd913ba44c96f8.png)
-
-![Screenshot 5](images/f38ac71a8e223302f5400b7b3fcab326.png)
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="images/10a9aba3a04fb190fd2dd1e47658810b.png" alt="Settings and proxy" /></td>
+    <td width="50%" align="center"><img src="images/37a3b8ead913b9b38125a4ead40f8792.png" alt="AI auto-reply settings" /></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="images/94691706b92d40ecc4ee096a5c3d2c6a.png" alt="Screenshot 3" /></td>
+    <td width="50%" align="center"><img src="images/d00ba2eb659372b6fdbd913ba44c96f8.png" alt="Screenshot 4" /></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="images/f38ac71a8e223302f5400b7b3fcab326.png" alt="Screenshot 5" /></td>
+    <td width="50%" align="center">More screenshots coming later</td>
+  </tr>
+</table>
 
 ## Who This Is For
 
@@ -225,13 +230,16 @@ If you plan to use it for a long time, test with small accounts, small batches, 
 
 For private customization, feature discussion, deployment help, or support, you can scan the contact image or donation image below.
 
-Contact:
-
-![Contact](images/wx.jpg)
-
-Support:
-
-![Donation](images/zhanshang.png)
+<table>
+  <tr>
+    <th width="50%">Contact</th>
+    <th width="50%">Support</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/wx.jpg" alt="Contact" width="260" /></td>
+    <td align="center"><img src="images/zhanshang.png" alt="Donation" width="260" /></td>
+  </tr>
+</table>
 
 ## Disclaimer
 
