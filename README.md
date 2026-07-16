@@ -4,17 +4,23 @@
 
 ## 赞助商
 
-<table>
-  <tr>
-    <td align="center">
-      <h3>Core2API</h3>
-      <p><strong>Claude / GPT / Grok / Gemini / DeepSeek 全球大模型 API</strong></p>
-      <p>全球大模型最低价 0.001 倍率，就在 <a href="https://core2api.com">core2api.com</a></p>
-      <p>可用于论文修改、代码编程、开发 App、逆向工程等场景</p>
-      <p>交流群：684281579</p>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <a href="https://core2api.com">
+    <img src="https://img.shields.io/badge/Sponsor-Core2API-111827?style=for-the-badge" alt="Sponsor Core2API" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Claude / GPT / Grok / Gemini / DeepSeek 全球大模型 API</strong><br>
+  全球大模型最低价 0.001 倍率，支持论文修改、代码编程、开发 App、逆向工程等场景
+</p>
+
+<p align="center">
+  <a href="https://core2api.com">
+    <img src="https://img.shields.io/badge/core2api.com-%E8%AE%BF%E9%97%AE%E5%AE%98%E7%BD%91-2563eb?style=flat-square" alt="访问 core2api.com" />
+  </a>
+  <img src="https://img.shields.io/badge/%E4%BA%A4%E6%B5%81%E7%BE%A4-684281579-16a34a?style=flat-square" alt="交流群 684281579" />
+</p>
 
 一个用于 TikTok 多账号管理、引流私信和自动回复的桌面工具。
 
