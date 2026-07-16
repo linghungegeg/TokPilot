@@ -2,6 +2,20 @@
 
 [English](README.en.md) | 简体中文
 
+## 赞助商
+
+<table>
+  <tr>
+    <td align="center">
+      <h3>Core2API</h3>
+      <p><strong>Claude / GPT / Grok / Gemini / DeepSeek 全球大模型 API</strong></p>
+      <p>全球大模型最低价 0.001 倍率，就在 <a href="https://core2api.com">core2api.com</a></p>
+      <p>可用于论文修改、代码编程、开发 App、逆向工程等场景</p>
+      <p>交流群：684281579</p>
+    </td>
+  </tr>
+</table>
+
 一个用于 TikTok 多账号管理、引流私信和自动回复的桌面工具。
 
 它把账号导入、登录、搜索用户、发送私信、AI 回复、代理配置、日志查看等常用操作放到一个本地桌面面板里，适合需要批量管理 TikTok 账号、做私信触达或研究网页自动化流程的朋友。
